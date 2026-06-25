@@ -1,13 +1,9 @@
 'use client'
 
-export const dynamic = 'force-dynamic'
-
 import { useState } from 'react'
-import { createClient } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 
 export default function ResetPasswordPage() {
-  const supabase = createClient()
   const router = useRouter()
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
@@ -16,6 +12,8 @@ export default function ResetPasswordPage() {
   async function handleReset(e: React.FormEvent) {
     e.preventDefault()
     setLoading(true)
+    const { createClient } = await import('@/lib/supabase')
+    const supabase = createClient()
     const { error } = await supabase.auth.updateUser({ password })
     if (error) setError(error.message)
     else router.push('/grups')
